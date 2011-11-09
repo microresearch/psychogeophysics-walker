@@ -1,0 +1,9 @@
+Psychogeophysics walker project.
+
+Please see: http://www.psychogeophysics.org/wiki/doku.php?id=walker
+
+KiCad designs are in hardware/
+
+Microcontroller software is in microc/
+
+Python logging software is in software/
