@@ -11,6 +11,25 @@
 
 #define UART_BAUD_CALC(UART_BAUD_RATE,F_OSC) ((F_OSC)/((UART_BAUD_RATE)*16l)-1)
 
+void InitSPI(void)
+{
+  DDRB = (1<<PB3)|(1<<PB5) | (1<<PB0) | (1<<PB2);	 // Set MOSI , SCK , SS /SS output=pin14 PB0
+ SPCR = ( (1<<SPE)|(1<<MSTR) | (1<<SPR1) |(1<<SPR0))|(1<<CPHA);	// Enable SPI, Master, set clock rate fck/128  
+ PORTB|=0x04;
+}
+
+char ReadByteSPI(void)
+{
+  unsigned char addr;
+  PORTB &= ~(1<<PB0); //low
+  SPDR=0x01; // dummy data
+  while(!(SPSR & (1<<SPIF)));
+  addr=SPDR;
+  _delay_us(1);            
+  PORTB |= (1<<PB0); // high
+  return addr;
+}
+
 void delay(int ms){
 	while(ms){
 		_delay_ms(0.96);
@@ -34,4 +53,30 @@ static int uart_putchar(char c, FILE *stream)
   loop_until_bit_is_set(UCSRA, UDRE);
   UDR = c;
   return 0;
+}
+
+void main() {
+  unsigned char d,dd;
+  unsigned int count,x,y,z;
+  unsigned long ttt, data;
+  serial_init(9600);
+  stdout = &mystdout;
+  InitSPI();
+  DDRD = 0x08;
+
+  while(1) {
+
+    PORTB &= ~(1<<PB0); //low
+    SPDR=0x01;
+    while(!(SPSR & (1<<SPIF)));
+    ttt=(unsigned char)SPDR;
+    _delay_us(100);
+    SPDR=0x01;
+    while(!(SPSR & (1<<SPIF)));
+    ttt+=(unsigned int)(SPDR)<<8;
+    PORTB |= (1<<PB0); // high
+    printf("test: %ld\r\n",ttt);
+    delay(100);
+    PORTD ^=0x08; //flash 
+  }
 }
