@@ -25,6 +25,12 @@ TODO in order:
 - EEG decoding and analysis
 - walk-flow of initialise, is all going, keep user updates
 
+-**update
+
+_ 3 threads - handle and parse data - sync - signalling?
+_ parsing gps on env board 
+
+
 """
 
 from threading import Thread
@@ -55,7 +61,6 @@ for port in ports:
 #    print line
 # parse line - is env board (e: , eeg ?format? or p:) 
 # these are determiners for serial stream
-# in test cases...
 
     if re.search("test",line):
         envboard=ser
@@ -68,11 +73,7 @@ for port in ports:
 
 while True:
     line=envboard.readline(); 
-    # strip value out
-#    line.strip()
-#    print line
     if len(line)>5:
         line=line[5:]
-#        print line
         value=int(line)
         print value
