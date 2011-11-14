@@ -1,4 +1,4 @@
-EESchema-DOCLIB  Version 2.0  12/11/2011-22:31:42
+EESchema-DOCLIB  Version 2.0  14/11/2011-18:23:10
 #
 $CMP CONN_3
 D Symbole general de connecteur
@@ -9,11 +9,6 @@ $CMP LM358
 D Dual Op amp (low power)
 K ampliop
 F ns/lm158.pdf
-$ENDCMP
-#
-$CMP POT
-D Potentionmetre
-K R
 $ENDCMP
 #
 #End Doc Library

@@ -1,11 +1,11 @@
 EESchema Schematic File Version 1
-LIBS:power,/root/kicad_libs/converted/analog-devices,ad5933,/root/xxxxx_2/xxxxx/trunk/detektor/detekt,/root/xxxxx_2/xxxxx/trunk/scrying_hardware/lib/Eigene,device,conn,linear,regul,74xx,cmos4000,adc-dac,memory,xilinx,special,microcontrollers,dsp,microchip,analog_switches,motorola,texas,intel,audio,interface,digital-audio,philips,display,cypress,siliconi,contrib,valves,./psyche.cache
+LIBS:power,ad5262,/root/kicad_libs/converted/analog-devices2,/root/kicad_libs/converted/analog-devices,ad5933,/root/xxxxx_2/xxxxx/trunk/detektor/detekt,/root/xxxxx_2/xxxxx/trunk/scrying_hardware/lib/Eigene,device,conn,linear,regul,74xx,cmos4000,adc-dac,memory,xilinx,special,microcontrollers,dsp,microchip,analog_switches,motorola,texas,intel,audio,interface,digital-audio,philips,display,cypress,siliconi,contrib,valves,./psyche.cache
 EELAYER 23  0
 EELAYER END
 $Descr A4 11700 8267
 Sheet 1 1
 Title ""
-Date "12 nov 2011"
+Date "14 nov 2011"
 Rev ""
 Comp ""
 Comment1 ""
@@ -13,8 +13,40 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-Text Label 4850 6950 0    60   ~
-plethy
+Text Label 4775 3875 0    60   ~
+adss
+Wire Wire Line
+	5025 3875 4750 3875
+Wire Wire Line
+	3000 5200 3150 5200
+Wire Wire Line
+	1125 5225 1125 5200
+Wire Wire Line
+	1125 5200 1500 5200
+Connection ~ 3175 5000
+Wire Wire Line
+	3175 5000 3175 4900
+Wire Wire Line
+	3175 4900 3000 4900
+Wire Wire Line
+	3000 4500 3250 4500
+Wire Wire Line
+	3400 4750 3400 4800
+Wire Wire Line
+	1500 5100 1050 5100
+Wire Wire Line
+	1500 4800 1300 4800
+Wire Wire Line
+	1250 4550 1250 4600
+Wire Wire Line
+	1250 4600 1500 4600
+Connection ~ 1375 7350
+Wire Wire Line
+	1200 7350 1750 7350
+Wire Wire Line
+	1200 7350 1200 6850
+Wire Wire Line
+	1200 6850 1000 6850
 Connection ~ 4775 6950
 Wire Wire Line
 	4925 6950 4575 6950
@@ -79,8 +111,6 @@ Connection ~ 1525 7050
 Wire Wire Line
 	1725 7050 1525 7050
 Connection ~ 1525 7350
-Wire Wire Line
-	1375 7350 1750 7350
 Wire Wire Line
 	1375 7350 1375 7150
 Wire Wire Line
@@ -501,38 +531,145 @@ Wire Wire Line
 	3100 6650 3100 6850
 Wire Wire Line
 	3100 6850 3225 6850
+Wire Wire Line
+	1000 6750 1175 6750
+Wire Wire Line
+	1000 6950 1000 7025
+Wire Wire Line
+	1000 7025 1125 7025
+Wire Wire Line
+	1125 7025 1125 6975
+Wire Wire Line
+	1500 4700 1300 4700
+Wire Wire Line
+	1050 4750 1050 4900
+Wire Wire Line
+	1050 4900 1500 4900
+Wire Wire Line
+	3350 5000 3350 5150
+Wire Wire Line
+	3400 5000 3000 5000
+Connection ~ 3350 5000
+Wire Wire Line
+	3000 4600 3250 4600
+Wire Wire Line
+	3400 4800 3000 4800
+Wire Wire Line
+	1500 5000 1375 5000
+Wire Wire Line
+	1375 5000 1375 4900
+Connection ~ 1375 4900
+Wire Wire Line
+	5025 4175 4850 4175
+Text Label 4875 4175 0    60   ~
+MOSI
+Text Label 3100 5200 0    60   ~
+adss
+Text Label 1225 5200 0    60   ~
+MOSI
+Text Label 3125 4600 0    60   ~
+W2
+Text Label 3125 4500 0    60   ~
+A2
+Text Label 8475 2675 0    60   ~
+A2
+Text Label 8750 2925 0    60   ~
+W2
 $Comp
-L POT RV?
-U 1 1 4EBEF6B2
-P 2950 6650
-F 0 "RV?" H 2950 6550 50  0000 C C
-F 1 "POT" H 2950 6650 50  0000 C C
-	1    2950 6650
+L C_MINI C19
+U 1 1 4EC159AA
+P 3400 4900
+F 0 "C19" V 3350 4950 30  0000 C C
+F 1 "1uF" V 3450 4950 25  0000 C C
+	1    3400 4900
 	0    1    1    0   
 $EndComp
 $Comp
-L VCC #PWR11
+L VCC #PWR7
+U 1 1 4EC159A6
+P 3400 4750
+F 0 "#PWR7" H 3400 4850 30  0001 C C
+F 1 "VCC" H 3400 4850 30  0000 C C
+	1    3400 4750
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR6
+U 1 1 4EC1598A
+P 3350 5150
+F 0 "#PWR6" H 3350 5150 30  0001 C C
+F 1 "GND" H 3350 5080 30  0001 C C
+	1    3350 5150
+	1    0    0    -1  
+$EndComp
+Text Label 1050 5100 0    60   ~
+SCLK
+$Comp
+L VCC #PWR1
+U 1 1 4EC15953
+P 1050 4750
+F 0 "#PWR1" H 1050 4850 30  0001 C C
+F 1 "VCC" H 1050 4850 30  0000 C C
+	1    1050 4750
+	1    0    0    -1  
+$EndComp
+Text Label 1300 4800 0    60   ~
+B1
+Text Label 1400 4700 0    60   ~
+W1
+Text Label 1250 4600 0    60   ~
+A1
+Text Label 3100 6800 0    60   ~
+W1
+Text Label 2950 7050 0    60   ~
+B1
+Text Label 2850 6400 0    60   ~
+A1
+$Comp
+L AD5262 U6
+U 1 1 4EC15726
+P 2250 4850
+F 0 "U6" H 2250 4750 50  0000 C C
+F 1 "AD5262" H 2250 4950 50  0000 C C
+	1    2250 4850
+	1    0    0    -1  
+$EndComp
+Text Notes 7875 825  0    60   ~
+ad5262
+$Comp
+L VCC #PWR2
+U 1 1 4EC14275
+P 1125 6975
+F 0 "#PWR2" H 1125 7075 30  0001 C C
+F 1 "VCC" H 1125 7075 30  0000 C C
+	1    1125 6975
+	1    0    0    -1  
+$EndComp
+Text Label 4850 6950 0    60   ~
+plethy
+$Comp
+L VCC #PWR16
 U 1 1 4EBEF696
 P 3975 6375
-F 0 "#PWR11" H 3975 6475 30  0001 C C
+F 0 "#PWR16" H 3975 6475 30  0001 C C
 F 1 "VCC" H 3975 6475 30  0000 C C
 	1    3975 6375
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR12
+L GND #PWR17
 U 1 1 4EBEF695
 P 3975 7425
-F 0 "#PWR12" H 3975 7425 30  0001 C C
+F 0 "#PWR17" H 3975 7425 30  0001 C C
 F 1 "GND" H 3975 7355 30  0001 C C
 	1    3975 7425
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR7
+L GND #PWR15
 U 1 1 4EBEF694
 P 3800 7475
-F 0 "#PWR7" H 3800 7475 30  0001 C C
+F 0 "#PWR15" H 3800 7475 30  0001 C C
 F 1 "GND" H 3800 7405 30  0001 C C
 	1    3800 7475
 	1    0    0    -1  
@@ -592,37 +729,37 @@ F 1 "LM358" H 4025 6700 60  0000 L C
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR2
+L VCC #PWR4
 U 1 1 4EBEF679
 P 1925 6275
-F 0 "#PWR2" H 1925 6375 30  0001 C C
+F 0 "#PWR4" H 1925 6375 30  0001 C C
 F 1 "VCC" H 1925 6375 30  0000 C C
 	1    1925 6275
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR3
+L GND #PWR5
 U 1 1 4EBEF5BF
 P 1925 7325
-F 0 "#PWR3" H 1925 7325 30  0001 C C
+F 0 "#PWR5" H 1925 7325 30  0001 C C
 F 1 "GND" H 1925 7255 30  0001 C C
 	1    1925 7325
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR1
+L GND #PWR3
 U 1 1 4EBEF56B
 P 1750 7375
-F 0 "#PWR1" H 1750 7375 30  0001 C C
+F 0 "#PWR3" H 1750 7375 30  0001 C C
 F 1 "GND" H 1750 7305 30  0001 C C
 	1    1750 7375
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR29
+L GND #PWR33
 U 1 1 4EBEF53E
 P 8000 6925
-F 0 "#PWR29" H 8000 6925 30  0001 C C
+F 0 "#PWR33" H 8000 6925 30  0001 C C
 F 1 "GND" H 8000 6855 30  0001 C C
 	1    8000 6925
 	1    0    0    -1  
@@ -722,10 +859,10 @@ SCL
 Text Label 9100 6000 0    60   ~
 3Vref
 $Comp
-L AGND #PWR46
+L AGND #PWR50
 U 1 1 4EBEF290
 P 10300 6950
-F 0 "#PWR46" H 10300 6950 40  0001 C C
+F 0 "#PWR50" H 10300 6950 40  0001 C C
 F 1 "AGND" H 10300 6880 50  0000 C C
 	1    10300 6950
 	1    0    0    -1  
@@ -749,37 +886,37 @@ F 1 "0.1uF" H 10200 6500 50  0000 L C
 	1    0    0    -1  
 $EndComp
 $Comp
-L AGND #PWR33
+L AGND #PWR37
 U 1 1 4EBEF28D
 P 8400 6900
-F 0 "#PWR33" H 8400 6900 40  0001 C C
+F 0 "#PWR37" H 8400 6900 40  0001 C C
 F 1 "AGND" H 8400 6830 50  0000 C C
 	1    8400 6900
 	1    0    0    -1  
 $EndComp
 $Comp
-L DGND #PWR30
+L DGND #PWR34
 U 1 1 4EBEF28C
 P 8250 6850
-F 0 "#PWR30" H 8250 6850 40  0001 C C
+F 0 "#PWR34" H 8250 6850 40  0001 C C
 F 1 "DGND" H 8250 6780 40  0000 C C
 	1    8250 6850
 	1    0    0    -1  
 $EndComp
 $Comp
-L AGND #PWR45
+L AGND #PWR49
 U 1 1 4EBEF28B
 P 9700 6950
-F 0 "#PWR45" H 9700 6950 40  0001 C C
+F 0 "#PWR49" H 9700 6950 40  0001 C C
 F 1 "AGND" H 9700 6880 50  0000 C C
 	1    9700 6950
 	1    0    0    -1  
 $EndComp
 $Comp
-L DGND #PWR40
+L DGND #PWR44
 U 1 1 4EBEF28A
 P 9150 6900
-F 0 "#PWR40" H 9150 6900 40  0001 C C
+F 0 "#PWR44" H 9150 6900 40  0001 C C
 F 1 "DGND" H 9150 6830 40  0000 C C
 	1    9150 6900
 	1    0    0    -1  
@@ -830,19 +967,19 @@ F 1 "200k" V 7000 5800 50  0000 C C
 	0    1    1    0   
 $EndComp
 $Comp
-L AGND #PWR39
+L AGND #PWR43
 U 1 1 4EBEF284
 P 9150 5750
-F 0 "#PWR39" H 9150 5750 40  0001 C C
+F 0 "#PWR43" H 9150 5750 40  0001 C C
 F 1 "AGND" H 9150 5680 50  0000 C C
 	1    9150 5750
 	1    0    0    -1  
 $EndComp
 $Comp
-L DGND #PWR41
+L DGND #PWR45
 U 1 1 4EBEF283
 P 9200 5900
-F 0 "#PWR41" H 9200 5900 40  0001 C C
+F 0 "#PWR45" H 9200 5900 40  0001 C C
 F 1 "DGND" H 9200 5830 40  0000 C C
 	1    9200 5900
 	1    0    0    -1  
@@ -858,19 +995,19 @@ F 1 "AD5933" H 8250 5950 50  0000 C C
 $EndComp
 Kmarq B 6100 5550 "Warning: Pin output connected to Pin 3state (net 34)" F=1
 $Comp
-L +5V #PWR20
+L +5V #PWR24
 U 1 1 4EBEF211
 P 4900 5300
-F 0 "#PWR20" H 4900 5390 20  0001 C C
+F 0 "#PWR24" H 4900 5390 20  0001 C C
 F 1 "+5V" H 4900 5390 30  0000 C C
 	1    4900 5300
 	1    0    0    -1  
 $EndComp
 $Comp
-L AGND #PWR25
+L AGND #PWR29
 U 1 1 4EBEF210
 P 6150 6500
-F 0 "#PWR25" H 6150 6500 40  0001 C C
+F 0 "#PWR29" H 6150 6500 40  0001 C C
 F 1 "AGND" H 6150 6430 50  0000 C C
 	1    6150 6500
 	1    0    0    -1  
@@ -896,10 +1033,10 @@ $EndComp
 Text Label 6250 5550 0    60   ~
 3Vref
 $Comp
-L AGND #PWR22
+L AGND #PWR26
 U 1 1 4EBEF20D
 P 5600 6150
-F 0 "#PWR22" H 5600 6150 40  0001 C C
+F 0 "#PWR26" H 5600 6150 40  0001 C C
 F 1 "AGND" H 5600 6080 50  0000 C C
 	1    5600 6150
 	1    0    0    -1  
@@ -915,19 +1052,19 @@ F 2 "analog-devices-SO8" H 5600 5700 50  0001 C C
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR43
+L VCC #PWR47
 U 1 1 4EBEF111
 P 9350 2500
-F 0 "#PWR43" H 9350 2600 30  0001 C C
+F 0 "#PWR47" H 9350 2600 30  0001 C C
 F 1 "VCC" H 9350 2600 30  0000 C C
 	1    9350 2500
 	-1   0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR31
+L VCC #PWR35
 U 1 1 4EBEF10A
 P 8350 2375
-F 0 "#PWR31" H 8350 2475 30  0001 C C
+F 0 "#PWR35" H 8350 2475 30  0001 C C
 F 1 "VCC" H 8350 2475 30  0000 C C
 	1    8350 2375
 	-1   0    0    -1  
@@ -944,40 +1081,31 @@ F 1 "3M" V 9350 4075 50  0000 C C
 	0    1    1    0   
 $EndComp
 Kmarq B 8550 3175 "Warning Pin passive Unconnected" F=1
-$Comp
-L POT RV1
-U 1 1 4EBEF0FA
-P 8550 2925
-F 0 "RV1" H 8550 2825 50  0000 C C
-F 1 "POT" H 8550 2925 50  0000 C C
-	1    8550 2925
-	0    1    1    0   
-$EndComp
 Text Label 10100 3225 0    60   ~
 gsr
 $Comp
-L AGND #PWR35
+L AGND #PWR39
 U 1 1 4EBEF0F9
 P 8750 2725
-F 0 "#PWR35" H 8750 2725 40  0001 C C
+F 0 "#PWR39" H 8750 2725 40  0001 C C
 F 1 "AGND" H 8750 2655 50  0000 C C
 	1    8750 2725
 	1    0    0    -1  
 $EndComp
 $Comp
-L AGND #PWR36
+L AGND #PWR40
 U 1 1 4EBEF0F8
 P 8750 3775
-F 0 "#PWR36" H 8750 3775 40  0001 C C
+F 0 "#PWR40" H 8750 3775 40  0001 C C
 F 1 "AGND" H 8750 3705 50  0000 C C
 	1    8750 3775
 	1    0    0    -1  
 $EndComp
 $Comp
-L AGND #PWR44
+L AGND #PWR48
 U 1 1 4EBEF0F7
 P 9350 3775
-F 0 "#PWR44" H 9350 3775 40  0001 C C
+F 0 "#PWR48" H 9350 3775 40  0001 C C
 F 1 "AGND" H 9350 3705 50  0000 C C
 	1    9350 3775
 	1    0    0    -1  
@@ -1028,10 +1156,10 @@ F 1 "OPA336" H 9400 2975 60  0000 L C
 	1    0    0    -1  
 $EndComp
 $Comp
-L VBUS #PWR37
+L VBUS #PWR41
 U 1 1 4EBEEF35
 P 8950 1825
-F 0 "#PWR37" H 8950 1925 30  0001 C C
+F 0 "#PWR41" H 8950 1925 30  0001 C C
 F 1 "VBUS" H 8950 1925 30  0000 C C
 	1    8950 1825
 	1    0    0    -1  
@@ -1051,19 +1179,19 @@ ADC7
 Text Label 7125 3675 0    60   ~
 ADC6
 $Comp
-L GND #PWR34
+L GND #PWR38
 U 1 1 4EBEEF34
 P 8550 1650
-F 0 "#PWR34" H 8550 1650 30  0001 C C
+F 0 "#PWR38" H 8550 1650 30  0001 C C
 F 1 "GND" H 8550 1580 30  0001 C C
 	1    8550 1650
 	1    0    0    -1  
 $EndComp
 $Comp
-L VBUS #PWR32
+L VBUS #PWR36
 U 1 1 4EBEEF33
 P 8400 1500
-F 0 "#PWR32" H 8400 1600 30  0001 C C
+F 0 "#PWR36" H 8400 1600 30  0001 C C
 F 1 "VBUS" H 8400 1600 30  0000 C C
 	1    8400 1500
 	1    0    0    -1  
@@ -1087,10 +1215,10 @@ F 1 "1uF" V 7150 4475 25  0000 C C
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #PWR26
+L GND #PWR30
 U 1 1 4EBEEF30
 P 7100 4575
-F 0 "#PWR26" H 7100 4575 30  0001 C C
+F 0 "#PWR30" H 7100 4575 30  0001 C C
 F 1 "GND" H 7100 4505 30  0001 C C
 	1    7100 4575
 	1    0    0    -1  
@@ -1098,10 +1226,10 @@ $EndComp
 Text Label 7050 2375 0    60   ~
 LED
 $Comp
-L GND #PWR5
+L GND #PWR9
 U 1 1 4EBEEF2F
 P 3475 1775
-F 0 "#PWR5" H 3475 1775 30  0001 C C
+F 0 "#PWR9" H 3475 1775 30  0001 C C
 F 1 "GND" H 3475 1705 30  0001 C C
 	1    3475 1775
 	1    0    0    -1  
@@ -1127,10 +1255,10 @@ F 1 "LED" H 2625 1475 50  0000 C C
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR10
+L GND #PWR13
 U 1 1 4EBEEF2C
 P 3675 3475
-F 0 "#PWR10" H 3675 3475 30  0001 C C
+F 0 "#PWR13" H 3675 3475 30  0001 C C
 F 1 "GND" H 3675 3405 30  0001 C C
 	1    3675 3475
 	1    0    0    -1  
@@ -1154,19 +1282,19 @@ F 1 "1uF" V 3675 3250 25  0000 C C
 	0    1    1    0   
 $EndComp
 $Comp
-L VCC #PWR13
+L VCC #PWR14
 U 1 1 4EBEEF29
 P 3750 3025
-F 0 "#PWR13" H 3750 3125 30  0001 C C
+F 0 "#PWR14" H 3750 3125 30  0001 C C
 F 1 "VCC" H 3750 3125 30  0000 C C
 	1    3750 3025
 	1    0    0    -1  
 $EndComp
 $Comp
-L VBUS #PWR9
+L VBUS #PWR12
 U 1 1 4EBEEF28
 P 3625 3025
-F 0 "#PWR9" H 3625 3125 30  0001 C C
+F 0 "#PWR12" H 3625 3125 30  0001 C C
 F 1 "VBUS" H 3625 3125 30  0000 C C
 	1    3625 3025
 	1    0    0    -1  
@@ -1189,19 +1317,19 @@ $EndComp
 Text Label 4275 3875 0    60   ~
 temp
 $Comp
-L GND #PWR16
+L GND #PWR20
 U 1 1 4EBEEF1C
 P 4475 4050
-F 0 "#PWR16" H 4475 4050 30  0001 C C
+F 0 "#PWR20" H 4475 4050 30  0001 C C
 F 1 "GND" H 4475 3980 30  0001 C C
 	1    4475 4050
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR14
+L VCC #PWR18
 U 1 1 4EBEEF1B
 P 4025 3600
-F 0 "#PWR14" H 4025 3700 30  0001 C C
+F 0 "#PWR18" H 4025 3700 30  0001 C C
 F 1 "VCC" H 4025 3700 30  0000 C C
 	1    4025 3600
 	1    0    0    -1  
@@ -1224,19 +1352,19 @@ pd1
 Text Label 6875 3075 0    39   ~
 pd3
 $Comp
-L VCC #PWR38
+L VCC #PWR42
 U 1 1 4EBEEF07
 P 9020 1185
-F 0 "#PWR38" H 9020 1285 30  0001 C C
+F 0 "#PWR42" H 9020 1285 30  0001 C C
 F 1 "VCC" H 9020 1285 30  0000 C C
 	1    9020 1185
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR42
+L GND #PWR46
 U 1 1 4EBEEF06
 P 9350 1700
-F 0 "#PWR42" H 9350 1700 30  0001 C C
+F 0 "#PWR46" H 9350 1700 30  0001 C C
 F 1 "GND" H 9350 1630 30  0001 C C
 	1    9350 1700
 	1    0    0    -1  
@@ -1272,10 +1400,10 @@ F 1 "CONN_5" V 2275 3300 50  0000 C C
 	-1   0    0    1   
 $EndComp
 $Comp
-L GND #PWR4
+L GND #PWR8
 U 1 1 4EBEEF03
 P 3450 1175
-F 0 "#PWR4" H 3450 1175 30  0001 C C
+F 0 "#PWR8" H 3450 1175 30  0001 C C
 F 1 "GND" H 3450 1105 30  0001 C C
 	1    3450 1175
 	1    0    0    -1  
@@ -1314,37 +1442,37 @@ F 1 "8MHz" H 4225 1275 60  0000 C C
 	1    0    0    -1  
 $EndComp
 $Comp
-L VBUS #PWR18
+L VBUS #PWR22
 U 1 1 4EBEEEFF
 P 4725 3125
-F 0 "#PWR18" H 4725 3225 30  0001 C C
+F 0 "#PWR22" H 4725 3225 30  0001 C C
 F 1 "VBUS" H 4725 3225 30  0000 C C
 	1    4725 3125
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR8
+L GND #PWR11
 U 1 1 4EBEEEFE
 P 3625 2475
-F 0 "#PWR8" H 3625 2475 30  0001 C C
+F 0 "#PWR11" H 3625 2475 30  0001 C C
 F 1 "GND" H 3625 2405 30  0001 C C
 	1    3625 2475
 	1    0    0    -1  
 $EndComp
 $Comp
-L VBUS #PWR6
+L VBUS #PWR10
 U 1 1 4EBEEEFD
 P 3525 2125
-F 0 "#PWR6" H 3525 2225 30  0001 C C
+F 0 "#PWR10" H 3525 2225 30  0001 C C
 F 1 "VBUS" H 3525 2225 30  0000 C C
 	1    3525 2125
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR24
+L GND #PWR28
 U 1 1 4EBEEEFC
 P 6075 4775
-F 0 "#PWR24" H 6075 4775 30  0001 C C
+F 0 "#PWR28" H 6075 4775 30  0001 C C
 F 1 "GND" H 6075 4705 30  0001 C C
 	1    6075 4775
 	1    0    0    -1  
@@ -1389,28 +1517,28 @@ F 1 "24pF" V 4575 1245 25  0000 C C
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #PWR15
+L GND #PWR19
 U 1 1 4EBEEEF7
 P 4225 1125
-F 0 "#PWR15" H 4225 1125 30  0001 C C
+F 0 "#PWR19" H 4225 1125 30  0001 C C
 F 1 "GND" H 4225 1055 30  0001 C C
 	1    4225 1125
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR28
+L GND #PWR32
 U 1 1 4EBEEEF6
 P 7475 1625
-F 0 "#PWR28" H 7475 1625 30  0001 C C
+F 0 "#PWR32" H 7475 1625 30  0001 C C
 F 1 "GND" H 7475 1555 30  0001 C C
 	1    7475 1625
 	-1   0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR27
+L VCC #PWR31
 U 1 1 4EBEEEF5
 P 7175 1225
-F 0 "#PWR27" H 7175 1325 30  0001 C C
+F 0 "#PWR31" H 7175 1325 30  0001 C C
 F 1 "VCC" H 7175 1325 30  0000 C C
 	1    7175 1225
 	-1   0    0    -1  
@@ -1434,19 +1562,19 @@ F 1 "47k" V 7225 1325 20  0000 C C
 	0    -1   1    0   
 $EndComp
 $Comp
-L GND #PWR17
+L GND #PWR21
 U 1 1 4EBEEEF2
 P 4625 2175
-F 0 "#PWR17" H 4625 2175 30  0001 C C
+F 0 "#PWR21" H 4625 2175 30  0001 C C
 F 1 "GND" H 4625 2105 30  0001 C C
 	1    4625 2175
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR21
+L VCC #PWR25
 U 1 1 4EBEEEF1
 P 4925 1775
-F 0 "#PWR21" H 4925 1875 30  0001 C C
+F 0 "#PWR25" H 4925 1875 30  0001 C C
 F 1 "VCC" H 4925 1875 30  0000 C C
 	1    4925 1775
 	1    0    0    -1  
@@ -1497,19 +1625,19 @@ F 1 "22" H 4745 2675 20  0000 C C
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR23
+L VCC #PWR27
 U 1 1 4EBEEEEB
 P 5975 1725
-F 0 "#PWR23" H 5975 1825 30  0001 C C
+F 0 "#PWR27" H 5975 1825 30  0001 C C
 F 1 "VCC" H 5975 1825 30  0000 C C
 	1    5975 1725
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR19
+L GND #PWR23
 U 1 1 4EBEEEEA
 P 4825 3575
-F 0 "#PWR19" H 4825 3575 30  0001 C C
+F 0 "#PWR23" H 4825 3575 30  0001 C C
 F 1 "GND" H 4825 3505 30  0001 C C
 	1    4825 3575
 	1    0    0    -1  
