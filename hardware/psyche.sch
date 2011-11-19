@@ -133,24 +133,6 @@ Wire Wire Line
 Wire Wire Line
 	7050 3575 6925 3575
 Wire Wire Line
-	8550 1650 8550 1600
-Wire Wire Line
-	8550 1600 8475 1600
-Wire Wire Line
-	8475 1600 8475 1700
-Wire Wire Line
-	8475 1700 8225 1700
-Wire Wire Line
-	8575 1900 8225 1900
-Wire Wire Line
-	8575 2000 8225 2000
-Wire Wire Line
-	8400 1500 8400 1600
-Wire Wire Line
-	8400 1600 8225 1600
-Wire Wire Line
-	8575 1800 8225 1800
-Wire Wire Line
 	6925 4325 7100 4325
 Wire Wire Line
 	3475 1775 3475 1575
@@ -1164,47 +1146,12 @@ F 1 "VBUS" H 8950 1925 30  0000 C C
 	1    8950 1825
 	1    0    0    -1  
 $EndComp
-Text Label 8500 2000 0    60   ~
-PWM
 Text Label 4800 3775 0    60   ~
 PWM
-Text Notes 7625 2175 0    60   ~
-extra
-Text Label 8425 1900 0    60   ~
-ADC7
-Text Label 8375 1800 0    60   ~
-ADC6
 Text Label 7050 3525 0    60   ~
 ADC7
 Text Label 7125 3675 0    60   ~
 ADC6
-$Comp
-L GND #PWR38
-U 1 1 4EBEEF34
-P 8550 1650
-F 0 "#PWR38" H 8550 1650 30  0001 C C
-F 1 "GND" H 8550 1580 30  0001 C C
-	1    8550 1650
-	1    0    0    -1  
-$EndComp
-$Comp
-L VBUS #PWR36
-U 1 1 4EBEEF33
-P 8400 1500
-F 0 "#PWR36" H 8400 1600 30  0001 C C
-F 1 "VBUS" H 8400 1600 30  0000 C C
-	1    8400 1500
-	1    0    0    -1  
-$EndComp
-$Comp
-L CONN_5 P3
-U 1 1 4EBEEF32
-P 7825 1800
-F 0 "P3" V 7775 1800 50  0000 C C
-F 1 "CONN_5" V 7875 1800 50  0000 C C
-	1    7825 1800
-	-1   0    0    1   
-$EndComp
 $Comp
 L C_MINI C8
 U 1 1 4EBEEF31
