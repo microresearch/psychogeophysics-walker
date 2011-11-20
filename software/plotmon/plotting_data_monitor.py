@@ -24,7 +24,6 @@ from eblib.serialutils import full_port_name, enumerate_serial_ports
 from eblib.utils import get_all_from_queue, get_item_from_queue
 from livedatafeed import LiveDataFeed
 
-
 class PlottingDataMonitor(QMainWindow):
     def __init__(self, parent=None):
         super(PlottingDataMonitor, self).__init__(parent)
@@ -53,8 +52,11 @@ class PlottingDataMonitor(QMainWindow):
         plot.setCanvasBackground(Qt.black)
         plot.setAxisTitle(Qwt.QwtPlot.xBottom, 'Time')
         plot.setAxisScale(Qwt.QwtPlot.xBottom, 0, 10, 1)
-        plot.setAxisTitle(Qwt.QwtPlot.yLeft, 'Temperature')
-        plot.setAxisScale(Qwt.QwtPlot.yLeft, 0, 250, 40)
+        plot.setAxisTitle(Qwt.QwtPlot.yLeft, 'val')
+        plot.setAxisScale(Qwt.QwtPlot.yLeft, 0, 30000, 40)
+
+        plot.setAxisAutoScale(Qwt.QwtPlot.yLeft);
+
         plot.replot()
         
         curve = Qwt.QwtPlotCurve('')
@@ -63,28 +65,7 @@ class PlottingDataMonitor(QMainWindow):
         pen.setWidth(2)
         curve.setPen(pen)
         curve.attach(plot)
-        
         return plot, curve
-
-    def create_thermo(self):
-        thermo = Qwt.QwtThermo(self)
-        thermo.setPipeWidth(6)
-        thermo.setRange(0, 120)
-        thermo.setAlarmLevel(80)
-        thermo.setAlarmEnabled(True)
-        thermo.setFillColor(Qt.green)
-        thermo.setAlarmColor(Qt.red)
-        thermo.setOrientation(Qt.Horizontal, Qwt.QwtThermo.BottomScale)
-        
-        return thermo
-
-    def create_knob(self):
-        knob = Qwt.QwtKnob(self)
-        knob.setRange(0, 20, 0, 1)
-        knob.setScaleMaxMajor(10)
-        knob.setKnobWidth(50)
-        knob.setValue(10)
-        return knob
 
     def create_status_bar(self):
         self.status_text = QLabel('Monitor idle')
@@ -93,41 +74,24 @@ class PlottingDataMonitor(QMainWindow):
     def create_main_frame(self):
         # Port name
         #
-        portname_l, self.portname = self.make_data_box('COM Port:')
+        portname_l, self.portname = self.make_data_box('Serial port:')
         
         portname_layout = QHBoxLayout()
         portname_layout.addWidget(portname_l)
         portname_layout.addWidget(self.portname, 0)
         portname_layout.addStretch(1)
-        portname_groupbox = QGroupBox('COM Port')
+        portname_groupbox = QGroupBox('Serial Port')
         portname_groupbox.setLayout(portname_layout)
         
         # Plot and thermo
         #
         self.plot, self.curve = self.create_plot()
-        self.thermo = self.create_thermo()
+#        self.thermo = self.create_thermo()
         
-        thermo_l = QLabel('Average')
-        thermo_layout = QHBoxLayout()
-        thermo_layout.addWidget(thermo_l)
-        thermo_layout.addWidget(self.thermo)
-        thermo_layout.setSpacing(5)
-        
-        self.updatespeed_knob = self.create_knob()
-        self.connect(self.updatespeed_knob, SIGNAL('valueChanged(double)'),
-            self.on_knob_change)
-        self.knob_l = QLabel('Update speed = %s (Hz)' % self.updatespeed_knob.value())
-        self.knob_l.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
-        knob_layout = QVBoxLayout()
-        knob_layout.addWidget(self.updatespeed_knob)
-        knob_layout.addWidget(self.knob_l)
         
         plot_layout = QVBoxLayout()
         plot_layout.addWidget(self.plot)
-        plot_layout.addLayout(thermo_layout)
-        plot_layout.addLayout(knob_layout)
-        
-        plot_groupbox = QGroupBox('Temperature')
+        plot_groupbox = QGroupBox('Value')
         plot_groupbox.setLayout(plot_layout)
         
         # Main frame and layout
@@ -146,7 +110,7 @@ class PlottingDataMonitor(QMainWindow):
         self.file_menu = self.menuBar().addMenu("&File")
         
         selectport_action = self.create_action("Select COM &Port...",
-            shortcut="Ctrl+P", slot=self.on_select_port, tip="Select a COM port")
+            shortcut="Ctrl+P", slot=self.on_select_port, tip="Select a serial port")
         self.start_action = self.create_action("&Start monitor",
             shortcut="Ctrl+M", slot=self.on_start, tip="Start the data monitor")
         self.stop_action = self.create_action("&Stop monitor",
@@ -222,7 +186,7 @@ class PlottingDataMonitor(QMainWindow):
             self.data_q,
             self.error_q,
             full_port_name(str(self.portname.text())),
-            38400)
+            9600)
         self.com_monitor.start()
         
         com_error = get_item_from_queue(self.error_q)
@@ -237,9 +201,8 @@ class PlottingDataMonitor(QMainWindow):
         self.timer = QTimer()
         self.connect(self.timer, SIGNAL('timeout()'), self.on_timer)
         
-        update_freq = self.updatespeed_knob.value()
-        if update_freq > 0:
-            self.timer.start(1000.0 / update_freq)
+        update_freq = 20
+        self.timer.start(1000.0 / update_freq)
         
         self.status_text.setText('Monitor running')
     
@@ -250,16 +213,6 @@ class PlottingDataMonitor(QMainWindow):
         self.read_serial_data()
         self.update_monitor()
 
-    def on_knob_change(self):
-        """ When the knob is rotated, it sets the update interval
-            of the timer.
-        """
-        update_freq = self.updatespeed_knob.value()
-        self.knob_l.setText('Update speed = %s (Hz)' % self.updatespeed_knob.value())
-
-        if self.timer.isActive():
-            update_freq = max(0.01, update_freq)
-            self.timer.setInterval(1000.0 / update_freq)
 
     def update_monitor(self):
         """ Updates the state of the monitor window with new 
@@ -277,23 +230,19 @@ class PlottingDataMonitor(QMainWindow):
             
             xdata = [s[0] for s in self.temperature_samples]
             ydata = [s[1] for s in self.temperature_samples]
-            
-            avg = sum(ydata) / float(len(ydata))
-                
-            self.plot.setAxisScale(Qwt.QwtPlot.xBottom, xdata[0], max(20, xdata[-1]))
+                            
+            self.plot.setAxisScale(Qwt.QwtPlot.xBottom, xdata[0], max(10, xdata[-1]))
             self.curve.setData(xdata, ydata)
             self.plot.replot()
-            
-            self.thermo.setValue(avg)
-            
+                        
     def read_serial_data(self):
         """ Called periodically by the update timer to read data
             from the serial port.
         """
         qdata = list(get_all_from_queue(self.data_q))
         if len(qdata) > 0:
-            data = dict(timestamp=qdata[-1][1], 
-                        temperature=ord(qdata[-1][0]))
+#            print qdata
+            data = dict(timestamp=qdata[-1][1],temperature=int(qdata[-1][0]))
             self.livefeed.add_data(data)
     
     # The following two methods are utilities for simpler creation

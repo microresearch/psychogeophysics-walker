@@ -40,7 +40,7 @@ class ComMonitorThread(threading.Thread):
                     port_baud,
                     port_stopbits=serial.STOPBITS_ONE,
                     port_parity=serial.PARITY_NONE,
-                    port_timeout=0.01):
+                    port_timeout=1): # was 0.01
         threading.Thread.__init__(self)
         
         self.serial_port = None
@@ -71,12 +71,12 @@ class ComMonitorThread(threading.Thread):
         while self.alive.isSet():
             # Reading 1 byte, followed by whatever is left in the
             # read buffer, as suggested by the developer of 
-            # PySerial.
+            # PySerial. // and if we want to read more...
             # 
-            data = self.serial_port.read(1)
-            data += self.serial_port.read(self.serial_port.inWaiting())
+            data = self.serial_port.readline()
+#            data += self.serial_port.read(self.serial_port.inWaiting())
             
-            if len(data) > 0:
+            if len(data) > 2:
                 timestamp = time.clock()
                 self.data_q.put((data, timestamp))
             
