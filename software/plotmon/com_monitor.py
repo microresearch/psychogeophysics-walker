@@ -1,7 +1,6 @@
 import Queue
 import threading
-import time
-
+import time, datetime
 import serial
 
 
@@ -42,6 +41,10 @@ class ComMonitorThread(threading.Thread):
                     port_parity=serial.PARITY_NONE,
                     port_timeout=1): # was 0.01
         threading.Thread.__init__(self)
+
+        now = datetime.datetime.now()
+        numm=now.strftime("%Y%m%d%H%M")
+        self.f = file("%s.results.log" %numm, 'w')
         
         self.serial_port = None
         self.serial_arg = dict( port=port_num,
@@ -78,11 +81,14 @@ class ComMonitorThread(threading.Thread):
             
             if len(data) > 2:
                 timestamp = time.clock()
+                self.f.write("%s,%s\n" %(data.strip(), timestamp))
+                self.f.flush()
                 self.data_q.put((data, timestamp))
             
         # clean up
         if self.serial_port:
             self.serial_port.close()
+            self.f.close()
 
     def join(self, timeout=None):
         self.alive.clear()

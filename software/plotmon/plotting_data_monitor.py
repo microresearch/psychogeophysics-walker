@@ -39,6 +39,8 @@ class PlottingDataMonitor(QMainWindow):
         self.create_menu()
         self.create_main_frame()
         self.create_status_bar()
+#        self.showFullScreen() 
+
         
     def make_data_box(self, name):
         label = QLabel(name)
@@ -60,7 +62,7 @@ class PlottingDataMonitor(QMainWindow):
         plot.replot()
         
         curve = Qwt.QwtPlotCurve('')
-        curve.setRenderHint(Qwt.QwtPlotItem.RenderAntialiased)
+#        curve.setRenderHint(Qwt.QwtPlotItem.RenderAntialiased)
         pen = QPen(QColor('limegreen'))
         pen.setWidth(2)
         curve.setPen(pen)
@@ -109,7 +111,7 @@ class PlottingDataMonitor(QMainWindow):
     def create_menu(self):
         self.file_menu = self.menuBar().addMenu("&File")
         
-        selectport_action = self.create_action("Select COM &Port...",
+        selectport_action = self.create_action("Select serial &Port...",
             shortcut="Ctrl+P", slot=self.on_select_port, tip="Select a serial port")
         self.start_action = self.create_action("&Start monitor",
             shortcut="Ctrl+M", slot=self.on_start, tip="Start the data monitor")
