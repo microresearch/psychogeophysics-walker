@@ -20,8 +20,8 @@ TODO in order:
 -*** second stage
 
 - threading - is parsing in thread or...?
-- design wx user interface
-- integrate with matplotlib
+- design wx user interface // or curses
+- integrate with matplotlib // seperate plotting app.
 - EEG decoding and analysis
 - walk-flow of initialise, is all going, keep user updates
 
@@ -56,7 +56,7 @@ print ports
 # run through ports and identify
 
 for port in ports:
-    ser = serial.Serial(port, 9600, timeout=1) # we need a whole line 
+    ser = serial.Serial(port, 57600, timeout=1) # we need a whole line 
     line = ser.read(128)
 #    print line
 # parse line - is env board (e: , eeg ?format? or p:) 
