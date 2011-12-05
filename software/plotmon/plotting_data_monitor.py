@@ -12,6 +12,17 @@ to control the frequency of screen updates.
 Eli Bendersky (eliben@gmail.com)
 License: this code is in the public domain
 Last modified: 07.08.2009
+
+Questions:
+
+why scroll window is only 1 second wide: 
+
+window of 100 samples 
+
+20 samples per second
+
+
+
 """
 import random, sys
 from PyQt4.QtCore import *
@@ -233,7 +244,8 @@ class PlottingDataMonitor(QMainWindow):
             xdata = [s[0] for s in self.temperature_samples]
             ydata = [s[1] for s in self.temperature_samples]
                             
-            self.plot.setAxisScale(Qwt.QwtPlot.xBottom, xdata[0], max(10, xdata[-1]))
+#            self.plot.setAxisScale(Qwt.QwtPlot.xBottom, xdata[0], max(10, xdata[-1]))
+            self.plot.setAxisScale(Qwt.QwtPlot.xBottom, xdata[0], xdata[0]+5)
             self.curve.setData(xdata, ydata)
             self.plot.replot()
                         
