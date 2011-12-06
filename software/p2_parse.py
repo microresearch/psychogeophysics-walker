@@ -2,15 +2,6 @@ import serial
 import string
 import sys
 import time
-import OSC
-
-osc = OSC.OSCClient()
-
-def send(message):
-#    print message
-    msg = OSC.OSCMessage("/xxxxx")
-    msg.append(message)
-    osc.sendto(msg,("localhost", 7777))
 
 ser = serial.Serial('/dev/ttyUSB0', 57600, timeout=1)
 try:
@@ -40,7 +31,7 @@ try:
 #             print 'count',count
 #             print 'data',data
 #             print 'switches',switches
-             send(data)
+             print data[0] # channel 1
              state = 1
 except KeyboardInterrupt, e:
      print 'closing serial port'
