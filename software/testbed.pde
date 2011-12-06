@@ -71,8 +71,8 @@ void init_gps(void)
   //  Serial1.begin(57600); // according to Cool Components this is th default for the LS20031
     Serial1.begin(9600); 
   delay(1000);
-  Serial1.print(LOCOSYS_REFRESH_RATE_200);
-  delay(500);
+  //  Serial1.print(LOCOSYS_REFRESH_RATE_200);
+  //  delay(500);
   Serial1.print(NMEA_OUTPUT_1HZ);
   delay(500);
   Serial1.print(SBAS_OFF);
@@ -295,7 +295,7 @@ void Wait_GPS_Fix(void)//Wait GPS fix...
   do
   {
     decode_gps();
-    //    delay(250);
+        delay(250);
     //    Serial.println(gpsStatus);
   }
   while(gpsStatus != GPS_STATUS_FIX);// loop till we get a fix
@@ -304,7 +304,7 @@ void Wait_GPS_Fix(void)//Wait GPS fix...
   do
   {
     decode_gps(); //Reading and parsing GPS data  
-    //    delay(250);
+        delay(250);
   }
   while((data_update_event&0x01!=0x01)&(data_update_event&0x02!=0x02));
 
@@ -314,6 +314,7 @@ void print_data(void)
 {
   int x;
   if (strlen(lat)>4){
+    Serial.print("e: ");
       Serial.print(lat);
       Serial.print(",");
       Serial.print(lon);

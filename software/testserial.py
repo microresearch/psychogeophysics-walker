@@ -24,6 +24,17 @@ import pprint
 import random
 import sys
 
+def get_all_from_queue(Q):
+    """ Generator to yield one after the others all items 
+        currently in the queue Q, without any waiting.
+    """
+    try:
+        while True:
+            yield Q.get_nowait( )
+    except Queue.Empty:
+        raise StopIteration
+
+
 class EEGThread(threading.Thread):
     """ 
     """
@@ -47,7 +58,7 @@ class EEGThread(threading.Thread):
             # later deal with queues
          if state == 1:
              # find sync0 (0xa5)
-             x = ord(ser.read())
+             x = ord(self.port.read())
              if x == 0xa5:
                  state = 2
          elif state == 2:
@@ -61,7 +72,9 @@ class EEGThread(threading.Thread):
              s = self.port.read(12)
              data = [ord(s[i])*256+ord(s[i+1]) for i in range(0,len(s),2)]
              switches = ord(self.port.read())
-             print data[0], # channel 1
+#             print data[0], # channel 1
+             self.data_q.put(data[0])
+
              state = 1
 
         if self.port:
@@ -71,11 +84,46 @@ class EEGThread(threading.Thread):
         self.alive.clear()
         threading.Thread.join(self, timeout)
 
+class ENVThread(threading.Thread):
+    """ 
+    """
+    def __init__(   self, 
+                    data_q, error_q, 
+                    whichport,
+                    ):
+        threading.Thread.__init__(self)
+
+        self.port=whichport
+        self.data_q = data_q
+        self.error_q = error_q
+        self.alive = threading.Event()
+        self.alive.set()
+        
+    def run(self):
+        while True:
+            # when we get a line of data. read it and signal main xxxxx
+            # to write ENV and EEG queues(?) to the file
+            if self.port.inWaiting():
+                data = self.port.readline()
+            
+                if len(data) > 2:
+                    timestamp = time.clock()
+                    self.data_q.put((data, timestamp))
+
+
+        if self.port:
+            self.port.close()
+
+    def join(self, timeout=None):
+        self.alive.clear()
+        threading.Thread.join(self, timeout)
+
+
 # unique file for logging to
 
 now = datetime.datetime.now()
 numm=now.strftime("%Y%m%d%H%M")
-filly = file("%s.results.log" %numm, 'w')
+#filly = file("%s.results.log" %numm, 'w')
 
 # list serial ports
 def scan():
@@ -98,12 +146,8 @@ for port in ports:
 # these are determiners for serial stream
 
     if re.search("e:",line):
-        envboard=ser
-        print "envboard detected at: %s" %(port)
-
-    if re.search("\$GP",line):
-        gpsboard=ser
-        print "GPS detected at: %s" %(port)
+        env=ser
+        print "envboard detected at: %s" %(port) # at present env only prints when has fix!
 
     if re.search(chr(0xa5),line):
         eeg=ser
@@ -111,18 +155,26 @@ for port in ports:
 
 # start up threads to read each stream.
 
-queue=[]
-error=[]
+data_q = Queue.Queue()
+error_q = Queue.Queue()
 
-EEGThread(queue, error, eeg).start()
-
-# sync to write with timestamp to file
-
+#data_q1 = Queue.Queue()
+#error_q1 = Queue.Queue()
 
 
-# while True:
-#     line=envboard.readline(); 
-#     if len(line)>5:
-#         line=line[5:]
-#         value=int(line)
-#         print value
+# only if we have these attached // but we _need_ them always so no point testing
+
+EEGThread(data_q, error_q, eeg).start()
+ENVThread(data_q, error_q, env).start()
+
+# synchronise so when we get GPS data from env we take data from EEG
+
+# try first using queues
+
+while True: 
+    qdata = list(get_all_from_queue(data_q))
+    if len(qdata) > 0:
+        print qdata, # how to flatten?
+        # save to file and flush
+        
+
