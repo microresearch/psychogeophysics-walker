@@ -1,20 +1,10 @@
 """ 
-first test code for walker project:
+first test code for walker project.
 
--*** first test stage:
-
-- check and assign all 3 serial streams correctly
-- write these to a log file as they come in to check sync
-- timestamping
-- parse each value from the 3 streams -> 10 or 11 data sources (or how many we have in testcase)
-- check for errors (eg. same values consistently in data source, GPS problems) and alert usre to error
-
--*** second stage
-
-- threading - is parsing in thread or...?
-- design user interface // wx or curses
+notes: wait a while for envboard
 
 """
+
 import Queue
 import threading
 import time, datetime
@@ -23,6 +13,12 @@ import os
 import pprint
 import random
 import sys
+
+def timestamp():
+    now = time.time()
+    localtime = time.localtime(now)
+    milliseconds = '%03d' % int((now - int(now)) * 1000)
+    return time.strftime('%Y%m%d%H%M%S', localtime) + milliseconds
 
 def get_all_from_queue(Q):
     """ Generator to yield one after the others all items 
@@ -55,7 +51,6 @@ class EEGThread(threading.Thread):
         state=1
 
         while True:
-            # later deal with queues
          if state == 1:
              # find sync0 (0xa5)
              x = ord(self.port.read())
@@ -74,7 +69,7 @@ class EEGThread(threading.Thread):
              switches = ord(self.port.read())
 #             print data[0], # channel 1
              self.data_q.put(data[0])
-
+             self.data_q.put(",")
              state = 1
 
         if self.port:
@@ -107,8 +102,13 @@ class ENVThread(threading.Thread):
                 data = self.port.readline()
             
                 if len(data) > 2:
-                    timestamp = time.clock()
-                    self.data_q.put((data, timestamp))
+                    now = datetime.datetime.now()
+                    sttamp = timestamp() 
+#                    self.data_q.put("\n")
+                    self.data_q.put(sttamp)
+                    self.data_q.put(",")
+                    self.data_q.put(data[3:-2])
+                    self.data_q.put(",")
 
 
         if self.port:
@@ -122,8 +122,8 @@ class ENVThread(threading.Thread):
 # unique file for logging to
 
 now = datetime.datetime.now()
-numm=now.strftime("%Y%m%d%H%M")
-#filly = file("%s.results.log" %numm, 'w')
+tstamp=now.strftime("%Y%m%d%H%M")
+filly = file("%s.results.log" %tstamp, 'w')
 
 # list serial ports
 def scan():
@@ -131,19 +131,15 @@ def scan():
     return glob.glob('/dev/ttyUSB*')
 
 ports=scan()
-print ports
-#if len(ports)<3: 
-#    print "Error: we have less than 3 devices"
-#    raise Exception
-
-# run through ports and identify
+print "Ports found: %s" %(ports)
+env=0
+eeg=0
 
 for port in ports:
     ser = serial.Serial(port, 57600, timeout=1) # we need a whole line 
     line = ser.read(128)
+
 #    print line
-# parse line - is env board (e: , eeg ?format? or p:) 
-# these are determiners for serial stream
 
     if re.search("e:",line):
         env=ser
@@ -153,28 +149,35 @@ for port in ports:
         eeg=ser
         print "EEG detected at: %s" %(port)
 
-# start up threads to read each stream.
-
 data_q = Queue.Queue()
 error_q = Queue.Queue()
 
-#data_q1 = Queue.Queue()
-#error_q1 = Queue.Queue()
+if eeg:
+    EEGThread(data_q, error_q, eeg).start()
+if env:
+    ENVThread(data_q, error_q, env).start()
+else:
+    print "Nothing to do! Nothing attached"
+    exit()
 
+# write header: date, attached ports
 
-# only if we have these attached // but we _need_ them always so no point testing
-
-EEGThread(data_q, error_q, eeg).start()
-ENVThread(data_q, error_q, env).start()
-
-# synchronise so when we get GPS data from env we take data from EEG
-
-# try first using queues
+filly.write("%s " %(tstamp)),
+if env:
+    filly.write("env, "),
+if eeg:
+    filly.write("EEG\n")
 
 while True: 
     qdata = list(get_all_from_queue(data_q))
     if len(qdata) > 0:
-        print qdata, # how to flatten?
-        # save to file and flush
+#        print "".join(map(str, qdata)),
+        os.system("clear")
+        print "writing: eeg %d env: %d" %(0 if eeg==0 else 1, 0 if env==0 else 1)
+
+# data sanity?
+
+        filly.write("".join(map(str,qdata)))
+        filly.flush()
         
 
