@@ -123,7 +123,7 @@ class ENVThread(threading.Thread):
 
 now = datetime.datetime.now()
 tstamp=now.strftime("%Y%m%d%H%M")
-filly = file("%s.results.log" %tstamp, 'w')
+filly = file("testlogs/%s.results.log" %tstamp, 'w')
 
 # list serial ports
 def scan():
@@ -162,7 +162,7 @@ else:
 
 # write header: date, attached ports
 
-filly.write("%s " %(tstamp)),
+filly.write("psychogephysics walkerlog: %s " %(tstamp)),
 if env:
     filly.write("env, "),
 if eeg:
