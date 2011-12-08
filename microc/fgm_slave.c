@@ -76,6 +76,8 @@ void main() {
     if (d1>d2) diff=d1-d2;
     else diff=d2-d1;
 
+    //    diff=16578;
+
     inbetween=(unsigned char)(diff&0xff);
     WriteByteSPI(inbetween);
     inbetween=((unsigned int)(diff)>>8)&0xff;
