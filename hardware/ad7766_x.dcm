@@ -1,0 +1,8 @@
+EESchema-DOCLIB Version 2.0 Date: nie, 12 gru 2010, 15:42:38
+#
+$CMP AD7766
+D AD7766 24-Bit, 8.5 mW, 109 dB, 128 kSPS ADC
+F http://www.analog.com/en/analog-to-digital-converters/ad-converters/ad7766/products/product.html
+$ENDCMP
+#
+#End Doc Library
