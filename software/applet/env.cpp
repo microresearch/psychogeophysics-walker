@@ -1,3 +1,5 @@
+#include "WProgram.h"
+#line 1 "env.pde"
 /* env board functions for arduino
 
 TODO:
@@ -64,6 +66,14 @@ const float t7=1000000.0;
 #define LOCOSYS_BAUD_RATE_115200 "$PMTK251,115200*1F\r\n"
 
 #define LOCOSYS_FACTORY_RESET "$PMTK104*37\r\n"
+
+#ifndef cbi
+#define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
+#endif
+#ifndef sbi
+#define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
+#endif
+
 void init_gps(void)
 {
   Serial1.begin(9600); 
@@ -271,13 +281,18 @@ void setup() {
   DDRB = (1<<PB1) | (1<<PB0);	 // Set SCK and SS as out
   SPCR = ( (1<<SPE)|(1<<MSTR)|(1<<CPHA));	// Enable SPI, Master, set clock rate fck/128  -- faster
   PORTB|=0x01;
+
+  sbi(ADCSRA,ADPS2) ;
+  cbi(ADCSRA,ADPS1) ;
+  cbi(ADCSRA,ADPS0) ;
+
   pinMode(selp, OUTPUT); // SS for slave
   sensors.begin();
   delay(100);
 }
 
 void loop() {
-  int light, hf, lf;
+  int light, hf, lf, x, xx, y, accum, alt =0, www, c = 0;
   // temperature and light (ADC0)
 
   //  sensors.requestTemperatures();
@@ -286,13 +301,34 @@ void loop() {
 
   //  light=analogRead(0);
 
-  lf=analogRead(1); hf=analogRead(2); // seems in this order
+  //  lf=analogRead(1); hf=analogRead(2); // seems in this order
   //  Serial.print(sensors.getTempCByIndex(0));
   //Serial.print(", ");
-  Serial.print(lf);
-  Serial.print(", ");
-  Serial.print(hf);
+  //  Serial.print(lf);
+  //  Serial.print(", ");
+  //  Serial.print(hf);
+  //  Serial.print("\r\n");
+
+  // testing the RNG:
+
+  accum=0;
+  for (y=0;y<200;y++){
+    for (x=0;x<166;x++){
+      www = analogRead(3); //??? // speed also???
+      c=www&0x01;
+      if (c==0) xx++;
+    }
+    if ((xx&1)==1) x=0;
+    else x=1;
+    xx=0;
+    x= x ^ alt;
+    alt= alt ^ 1;
+    if (x==1)	accum++;
+  }
+
+  Serial.print(accum);
   Serial.print("\r\n");
+
 
 
   //  Wait_GPS_Fix(); - resolve delay issues
@@ -312,3 +348,16 @@ void loop() {
   delay(100);*/
 
 }
+#line 1 "/root/olderprojects/dump/arduino-0016//hardware/cores/arduino/main.cxx"
+int main(void)
+{
+	init();
+
+	setup();
+    
+	for (;;)
+		loop();
+        
+	return 0;
+}
+

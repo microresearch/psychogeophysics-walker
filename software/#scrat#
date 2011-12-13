@@ -1,0 +1,32 @@
+52.923,007.0233333333333333340245
+
+// should be 52.0923 and 7.23333
+
+            data = self.serial_port.readline()
+#            data += self.serial_port.read(self.serial_port.inWaiting())
+            
+            if len(data) > 2:
+                timestamp = time.clock()
+                print data
+                self.data_q.put((data, timestamp))
+
+
+            self.port.read()
+cw�2V��w�cL�e: 5205.5425,00714.0264,274,292,290,288,289,288,283          |
+e: 5205.5424,00714.0256,270,286,285,283,283,283,280
+
+
+
+A recent example study conducted at the University of
+
+ Sussex (Pattern
+Recognition in a Bucket) takes the terms of the LSM quite literally,
+making use of the waves produced on the surface of water to
+pre-process date and assist in certain speech recognition tasks.
+
+At the same time, the more general terms of a "state machine," with an
+obvious nod towards political machinery, signify a methodology for
+describing situations and systems, in terms of states, and transitions
+between states. The behaviour of any system so described can be
+simulated, and thus predicted.
+

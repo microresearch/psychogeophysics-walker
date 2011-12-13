@@ -1,0 +1,41 @@
+/* psyche board functions for arduino:
+
+gsr-average
+imp - see 5933.pde - do GSR/imp share the same electrode?
+temperature - below
+
+*/
+
+// first- test temperature
+#include <OneWire.h>
+#include <DallasTemperature.h>
+ 
+#define ONE_WIRE_BUS 2
+ 
+OneWire oneWire(ONE_WIRE_BUS);
+ 
+DallasTemperature sensors(&oneWire);
+DallasTemperature setWaitForConversion(false);
+ 
+void setup(void)
+{
+  Serial.begin(9600);
+  sensors.begin();
+}
+ 
+ 
+void loop(void)
+{
+  //  sensors.requestTemperatures();
+
+  // delay here - do otherstuff
+  // read/average? GSR + read AD5933
+
+  //  Serial.print(sensors.getTempCByIndex(0));
+  //  Serial.print(", ");
+  Serial.print("TeST");
+
+
+  // but should print as one collected buffer...
+ 
+}
