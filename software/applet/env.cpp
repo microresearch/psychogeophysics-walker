@@ -76,9 +76,9 @@ const float t7=1000000.0;
 
 void init_gps(void)
 {
-  Serial1.begin(9600); 
-  delay(1000);
-  Serial1.print(NMEA_OUTPUT_1HZ);
+  Serial1.begin(57600); // shld be 57600 
+    delay(500);
+  Serial1.print(NMEA_OUTPUT_5HZ);
   delay(500);
   Serial1.print(SBAS_OFF);
 }
@@ -248,7 +248,7 @@ void Wait_GPS_Fix(void)
   do
   {
     decode_gps();
-    delay(250); // TODO: delays!
+    //            delay(25); // TODO: delays! // was 250
   }
   while(gpsStatus != GPS_STATUS_FIX);// loop till we get a fix
 
@@ -256,24 +256,11 @@ void Wait_GPS_Fix(void)
   do
   {
     decode_gps();
-    delay(250);
+    //        delay(25); // was 250
   }
   while((data_update_event&0x01!=0x01)&(data_update_event&0x02!=0x02));
 
 }
-
-void print_data(void)
-{
-  int x;
-  if (strlen(lat)>4){
-    Serial.print("e: ");
-      Serial.print(lat);
-      Serial.print(",");
-      Serial.print(lon);
-      Serial.println("\r\n");
-      }
-}
-
 
 void setup() {
   Serial.begin(9600);
@@ -293,26 +280,18 @@ void setup() {
 
 void loop() {
   int light, hf, lf, x, xx, y, accum, alt =0, www, c = 0;
+  float temp;
   // temperature and light (ADC0)
 
-  //  sensors.requestTemperatures();
+  sensors.requestTemperatures();
+  light=analogRead(0);
+  lf=analogRead(1); 
+  hf=analogRead(2); // seems in this order
 
-  // delay here - do otherstuff
-
-  //  light=analogRead(0);
-
-  //  lf=analogRead(1); hf=analogRead(2); // seems in this order
-  //  Serial.print(sensors.getTempCByIndex(0));
-  //Serial.print(", ");
-  //  Serial.print(lf);
-  //  Serial.print(", ");
-  //  Serial.print(hf);
-  //  Serial.print("\r\n");
-
-  // testing the RNG:
+  /* RNG */
 
   accum=0;
-  for (y=0;y<200;y++){
+  for (y=0;y<100;y++){
     for (x=0;x<166;x++){
       www = analogRead(3); //??? // speed also???
       c=www&0x01;
@@ -326,16 +305,9 @@ void loop() {
     if (x==1)	accum++;
   }
 
-  Serial.print(accum);
-  Serial.print("\r\n");
-
-
-
-  //  Wait_GPS_Fix(); - resolve delay issues
-  //  print_data();
 
   // reading the FGM board
-  /*  digitalWrite(selp, LOW);
+  digitalWrite(selp, LOW);
   SPDR=0x01;
   while(!(SPSR & (1<<SPIF)));
   ttt=(unsigned char)SPDR;
@@ -344,9 +316,34 @@ void loop() {
   while(!(SPSR & (1<<SPIF)));
   ttt+=(unsigned int)(SPDR)<<8;
   digitalWrite(selp, HIGH);
-  Serial.println(ttt); // buffer for one single serial write
-  delay(100);*/
 
+  temp=sensors.getTempCByIndex(0);
+
+  // GPS, temp, light, lf, hf, ttt(FGM), accum (RNG)
+
+      Wait_GPS_Fix(); // resolve delay issues
+
+
+    if (strlen(lat)>4){
+    Serial.print("e: ");
+    Serial.print(lat);
+    Serial.print(",");
+    Serial.print(lon);
+    Serial.print(",");
+    Serial.print(temp);
+    Serial.print(",");
+    Serial.print(light);
+    Serial.print(",");
+    Serial.print(lf);
+    Serial.print(",");
+    Serial.print(hf); // zero????
+    Serial.print(",");
+    Serial.print(ttt); //is printing as long TEST
+    Serial.print(",");
+    Serial.print(accum);
+    Serial.println("\r\n");
+    }
+  
 }
 #line 1 "/root/olderprojects/dump/arduino-0016//hardware/cores/arduino/main.cxx"
 int main(void)
