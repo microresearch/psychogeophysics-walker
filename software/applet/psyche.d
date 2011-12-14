@@ -24,4 +24,4 @@ applet/psyche.o applet/psyche.d: applet/psyche.cpp \
   /root/olderprojects/dump/arduino-0016//hardware/libraries/OneWire/OneWire.h \
   /root/olderprojects/dump/arduino-0016//hardware/cores/arduino/pins_arduino.h \
   /usr/local/avr/lib/gcc/avr/4.3.4/../../../../avr/include/avr/pgmspace.h \
-  /root/olderprojects/dump/arduino-0016//hardware/libraries/DallasTemperature/DallasTemperature.h
+  /root/olderprojects/dump/arduino-0016//hardware/libraries/Wire/Wire.h

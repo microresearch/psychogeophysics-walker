@@ -1,12 +1,6 @@
-/* psyche board functions for arduino:
-
-gsr-average
-imp - see 5933.pde
-temperature - below
-
+/* psyche board functions for arduino
 */
 
-// first- test temperature
 #include <OneWire.h>
 #include <DallasTemperature.h>
  
@@ -26,14 +20,27 @@ void setup(void)
  
 void loop(void)
 {
-  sensors.requestTemperatures();
+  float temp;
+  int gsr; // gsr is on ADC0
+
+  //  sensors.requestTemperatures();
 
   // delay here - do otherstuff
   // read/average? GSR + read AD5933
 
-  Serial.print(sensors.getTempCByIndex(0));
-  Serial.print(", ");
+  gsr=0;
+  for (int x=0;x<100;x++){
+    gsr += analogRead(0);
+    _delay_ms(1);
+  }
+  gsr=gsr/100;
 
+  Serial.print(gsr);
+  Serial.print("\r\n");
+
+  //  Serial.print(sensors.getTempCByIndex(0));
+  //  Serial.print(", ");
+  
   // but should print as one collected buffer...
  
 }
