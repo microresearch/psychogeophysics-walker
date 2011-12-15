@@ -1,6 +1,9 @@
 #include "WProgram.h"
 #line 1 "psyche.pde"
 /* psyche board functions for arduino
+
+- added PD7 = pin 7 for flashing -> GND
+
 */
 
 #include <OneWire.h>
@@ -458,59 +461,64 @@ strFreqLSB=0x000000ff & freqcode;
   load_settling_time();
   initialize_frequency();
 
+  pinMode(7, OUTPUT);
   ds.search(addr);
-}
- 
- 
-void loop(void)
-{
-  float temp;
-  long gsr; // gsr is on ADC0
+ }
 
-  // BELOW should be in ad5933 loop somehow
-  
-  start_sweep();  
-   
-  while(!(read_status_register() & 0x04)) {   //- check status reg to see if sweep complete
 
-  while(!(read_status_register() & 0x02));  //- check status reg to see if dft complete
+ void loop(void)
+ {
+   float temp;
+   long gsr; // gsr is on ADC0
 
-  //- read real/imag and print with frequency
-  get_real_img_data();
-  //  Serial.print("real: ");
-  //  Serial.print(fft_real_data);
+   // BELOW should be in ad5933 loop somehow
 
-  //  Serial.print(" image: ");
+      start_sweep();  
 
-  //  magn+=sqrt(fft_real_data*fft_real_data+fft_img_data*fft_img_data);
-  magn+=fft_real_data*fft_real_data; // not enough space for sqrt
-    cnt++;
+      while(!(read_status_register() & 0x04)) {   //- check status reg to see if sweep complete
 
-    gsr += analogRead(0);
+      while(!(read_status_register() & 0x02));  //- check status reg to see if dft complete
 
-  if (cnt>4){
-    cnt=0;
-    magn=magn/4;
-    gsr=gsr/4;
-  /*  Serial.print(fft_real_data);
-  Serial.print(" ");
-  Serial.print(fft_img_data);*/
-  Serial.print(magn);
-  magn=0;
-  Serial.print(", ");
-  getTemp();
-  Serial.print(Whole);
-  Serial.print(".");
-  Serial.print(Fract);
-  Serial.print(", ");
-  Serial.print(gsr);
-  Serial.print("\r\n");
-  }
+   //- read real/imag and print with frequency
+      get_real_img_data();
+   //  Serial.print("real: ");
+   //  Serial.print(fft_real_data);
+
+   //  Serial.print(" image: ");
+
+   //magn+=sqrt(fft_real_data*fft_real_data+fft_img_data*fft_img_data);
+   //   magn+=fft_real_data*fft_real_data; // not enough space for sqrt
+     cnt++;
+
+     if (cnt>4){
+     gsr += analogRead(0);
+     fft_real_data=fft_real_data/4;
+     fft_img_data=fft_img_data/4;
+     gsr=gsr/4; // average
+   Serial.print("p: ");
+     
+   Serial.print(fft_real_data);
+   Serial.print(" ");
+   Serial.print(fft_img_data);
+   Serial.print(", ");
+   getTemp();
+   Serial.print(Whole);
+   Serial.print(".");
+   Serial.print(Fract);
+   Serial.print(", ");
+   Serial.print(gsr);
+   Serial.print("\r\n");
+
+   // flash pin 7 = pD7
+
+   PORTD ^= 128;
+
+     }
   gsr=0;
   // but should print as one collected buffer...???
   repeat_frequency();
-    }
-}
+ }
+ }
 #line 1 "/root/olderprojects/dump/arduino-0016//hardware/cores/arduino/main.cxx"
 int main(void)
 {

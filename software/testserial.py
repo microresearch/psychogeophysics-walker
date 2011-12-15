@@ -1,7 +1,18 @@
 """ 
 first test code for walker project.
 
-notes: wait a while for envboard
+TODO:
+
+- question of waiting and should not start up until we have all ports ready
+- add psyche thread
+- headers for each:
+
+env: GPS, temp, light, lf, hf, FGM, RNG
+
+psyche: real, imag, temperature, gsr
+
+- strip and check data
+- some kind of monitor for incoming data (eg. show GPS and values?)
 
 """
 
@@ -118,12 +129,51 @@ class ENVThread(threading.Thread):
         self.alive.clear()
         threading.Thread.join(self, timeout)
 
+class PSYCHEThread(threading.Thread):
+    """ 
+    """
+    def __init__(   self, 
+                    data_q, error_q, 
+                    whichport,
+                    ):
+        threading.Thread.__init__(self)
+
+        self.port=whichport
+        self.data_q = data_q
+        self.error_q = error_q
+        self.alive = threading.Event()
+        self.alive.set()
+        
+    def run(self):
+        while True:
+            # when we get a line of data. read it and signal main xxxxx
+            # to write ENV and EEG queues(?) to the file
+            if self.port.inWaiting():
+                data = self.port.readline()
+            
+                if len(data) > 2:
+                    now = datetime.datetime.now()
+                    sttamp = timestamp() 
+#                    self.data_q.put("\n")
+                    self.data_q.put(sttamp)
+                    self.data_q.put(",")
+                    self.data_q.put(data[3:-2]) # test this!
+                    self.data_q.put(",")
+
+
+        if self.port:
+            self.port.close()
+
+    def join(self, timeout=None):
+        self.alive.clear()
+        threading.Thread.join(self, timeout)
+
 
 # unique file for logging to
 
 now = datetime.datetime.now()
 tstamp=now.strftime("%Y%m%d%H%M")
-filly = file("testlogs/%s.results.log" %tstamp, 'w')
+filly = file("testlogs/%s.log" %tstamp, 'w')
 
 # list serial ports
 def scan():
@@ -133,6 +183,7 @@ def scan():
 ports=scan()
 print "Ports found: %s" %(ports)
 env=0
+psyche=0
 eeg=0
 
 for port in ports:
@@ -143,11 +194,15 @@ for port in ports:
 
     if re.search("e:",line):
         env=ser
-        print "envboard detected at: %s" %(port) # at present env only prints when has fix!
+        print "environ detected at: %s" %(port) # at present env only prints when has fix!
 
     if re.search(chr(0xa5),line):
         eeg=ser
         print "EEG detected at: %s" %(port)
+
+    if re.search("p:",line):
+        psyche=ser
+        print "psyche detected at: %s" %(port) # at present env only prints when has fix!
 
 data_q = Queue.Queue()
 error_q = Queue.Queue()
@@ -156,24 +211,30 @@ if eeg:
     EEGThread(data_q, error_q, eeg).start()
 if env:
     ENVThread(data_q, error_q, env).start()
+if psyche:
+    PSYCHEThread(data_q, error_q, env).start()
+
 else:
     print "Nothing to do! Nothing attached"
-    exit()
+    exit() # SCAN AGAIN
 
 # write header: date, attached ports
 
-filly.write("psychogephysics walkerlog: %s " %(tstamp)),
+filly.write("psychogeophysics walkerlog: %s " %(tstamp)),
 if env:
     filly.write("env, "),
+if psyche:
+    filly.write("psyche, "),
 if eeg:
     filly.write("EEG\n")
+
 
 while True: 
     qdata = list(get_all_from_queue(data_q))
     if len(qdata) > 0:
 #        print "".join(map(str, qdata)),
         os.system("clear")
-        print "writing: eeg %d env: %d" %(0 if eeg==0 else 1, 0 if env==0 else 1)
+        print "writing: eeg %d psyche: %d env: %d" %(0 if eeg==0 else 1, 0 if psyche=0 else 1, 0 if env==0 else 1)
 
 # data sanity?
 
