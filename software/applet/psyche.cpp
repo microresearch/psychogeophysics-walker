@@ -438,7 +438,7 @@ void getTemp() {
  
 void setup(void)
 {
-  Serial.begin(9600);
+  Serial.begin(57600);
   Wire.begin();
   sbi(ADCSRA,ADPS2) ;
   cbi(ADCSRA,ADPS1) ;
@@ -498,7 +498,7 @@ strFreqLSB=0x000000ff & freqcode;
    Serial.print("p: ");
      
    Serial.print(fft_real_data);
-   Serial.print(" ");
+   Serial.print(", ");
    Serial.print(fft_img_data);
    Serial.print(", ");
    getTemp();

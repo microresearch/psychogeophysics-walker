@@ -115,11 +115,11 @@ class ENVThread(threading.Thread):
                 if len(data) > 2:
                     now = datetime.datetime.now()
                     sttamp = timestamp() 
-#                    self.data_q.put("\n")
-                    self.data_q.put(sttamp)
-                    self.data_q.put(",")
+                    self.data_q.put("\n")
                     self.data_q.put(data[3:-2])
-                    self.data_q.put(",")
+                    self.data_q.put(", ")
+                    self.data_q.put(sttamp)
+#                    self.data_q.put(", ")
 
 
         if self.port:
@@ -154,11 +154,11 @@ class PSYCHEThread(threading.Thread):
                 if len(data) > 2:
                     now = datetime.datetime.now()
                     sttamp = timestamp() 
-#                    self.data_q.put("\n")
+                    self.data_q.put("\n")
+                    self.data_q.put(data[:-2]) # test this!
+                    self.data_q.put(", ")
                     self.data_q.put(sttamp)
-                    self.data_q.put(",")
-                    self.data_q.put(data[3:-2]) # test this!
-                    self.data_q.put(",")
+#                    self.data_q.put(", ")
 
 
         if self.port:
@@ -180,29 +180,43 @@ def scan():
     """scan for available ports. return a list of device names."""
     return glob.glob('/dev/ttyUSB*')
 
-ports=scan()
-print "Ports found: %s" %(ports)
+def attachment():
+    """scan and attach"""
+    global env
+    global eeg
+    global psyche
+    ports=scan()
+    print "TESTING: Ports found: %s" %(ports)
+    count=0
+
+    for port in ports:
+        ser = serial.Serial(port, 57600, timeout=1) # we need a whole line 
+        line = ser.read(128)
+
+        if re.search("e:",line):
+            env=ser
+            print "environ detected at: %s" %(port) # at present env only prints when has fix!
+            count=count+1
+
+        if re.search(chr(0xa5),line):
+            eeg=ser
+            print "EEG detected at: %s" %(port)
+            count=count+1
+
+        if re.search("p:",line):
+            psyche=ser
+            print "psyche detected at: %s" %(port) # at present env only prints when has fix!
+            count=count+1
+    return count
+
 env=0
 psyche=0
 eeg=0
+expected = sys.argv[1]
+res=attachment()
 
-for port in ports:
-    ser = serial.Serial(port, 57600, timeout=1) # we need a whole line 
-    line = ser.read(128)
-
-#    print line
-
-    if re.search("e:",line):
-        env=ser
-        print "environ detected at: %s" %(port) # at present env only prints when has fix!
-
-    if re.search(chr(0xa5),line):
-        eeg=ser
-        print "EEG detected at: %s" %(port)
-
-    if re.search("p:",line):
-        psyche=ser
-        print "psyche detected at: %s" %(port) # at present env only prints when has fix!
+while (res<int(expected)):
+    res=attachment()
 
 data_q = Queue.Queue()
 error_q = Queue.Queue()
@@ -212,11 +226,7 @@ if eeg:
 if env:
     ENVThread(data_q, error_q, env).start()
 if psyche:
-    PSYCHEThread(data_q, error_q, env).start()
-
-else:
-    print "Nothing to do! Nothing attached"
-    exit() # SCAN AGAIN
+    PSYCHEThread(data_q, error_q, psyche).start()
 
 # write header: date, attached ports
 
@@ -228,13 +238,12 @@ if psyche:
 if eeg:
     filly.write("EEG\n")
 
-
 while True: 
     qdata = list(get_all_from_queue(data_q))
     if len(qdata) > 0:
 #        print "".join(map(str, qdata)),
         os.system("clear")
-        print "writing: eeg %d psyche: %d env: %d" %(0 if eeg==0 else 1, 0 if psyche=0 else 1, 0 if env==0 else 1)
+        print "writing: eeg %d psyche: %d env: %d to %s.log" %(0 if eeg==0 else 1, 0 if psyche==0 else 1, 0 if env==0 else 1, tstamp)
 
 # data sanity?
 

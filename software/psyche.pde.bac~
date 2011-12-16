@@ -459,8 +459,8 @@ strFreqLSB=0x000000ff & freqcode;
   load_settling_time();
   initialize_frequency();
 
-    pinMode(7, OUTPUT);
-   ds.search(addr);
+  pinMode(7, OUTPUT);
+  ds.search(addr);
  }
 
 
@@ -471,35 +471,33 @@ strFreqLSB=0x000000ff & freqcode;
 
    // BELOW should be in ad5933 loop somehow
 
-   start_sweep();  
+      start_sweep();  
 
-   while(!(read_status_register() & 0x04)) {   //- check status reg to see if sweep complete
+      while(!(read_status_register() & 0x04)) {   //- check status reg to see if sweep complete
 
-   while(!(read_status_register() & 0x02));  //- check status reg to see if dft complete
+      while(!(read_status_register() & 0x02));  //- check status reg to see if dft complete
 
    //- read real/imag and print with frequency
-   get_real_img_data();
+      get_real_img_data();
    //  Serial.print("real: ");
    //  Serial.print(fft_real_data);
 
    //  Serial.print(" image: ");
 
-   //  magn+=sqrt(fft_real_data*fft_real_data+fft_img_data*fft_img_data);
-   magn+=fft_real_data*fft_real_data; // not enough space for sqrt
+   //magn+=sqrt(fft_real_data*fft_real_data+fft_img_data*fft_img_data);
+   //   magn+=fft_real_data*fft_real_data; // not enough space for sqrt
      cnt++;
 
+     if (cnt>4){
      gsr += analogRead(0);
-
-   if (cnt>4){
-     cnt=0;
-     magn=magn/4;
-     gsr=gsr/4;
-   /*  Serial.print(fft_real_data);
+     fft_real_data=fft_real_data/4;
+     fft_img_data=fft_img_data/4;
+     gsr=gsr/4; // average
+   Serial.print("p: ");
+     
+   Serial.print(fft_real_data);
    Serial.print(" ");
-   Serial.print(fft_img_data);*/
-     Serial.print("p: ");
-     Serial.print(magn);
-     magn=0;
+   Serial.print(fft_img_data);
    Serial.print(", ");
    getTemp();
    Serial.print(Whole);
@@ -511,11 +509,11 @@ strFreqLSB=0x000000ff & freqcode;
 
    // flash pin 7 = pD7
 
-   PIND ^= _BV(7);
+   PORTD ^= 128;
 
-  }
+     }
   gsr=0;
   // but should print as one collected buffer...???
   repeat_frequency();
-    }
-}
+ }
+ }

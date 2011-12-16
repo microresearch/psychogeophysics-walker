@@ -53,7 +53,6 @@ void delay(int ms){
 }
 
 void main() {
-  unsigned int count,y,z;
   unsigned char inbetween;
   unsigned int d1,d2,diff;
   InitSPI();
@@ -65,6 +64,8 @@ void main() {
   // TODO: enable interrupt on INT0 and INT1
   GICR |= (1<<INT0) | (1<<INT1); 
   MCUCR |= (1<<ISC01) | (1<<ISC00) | (1<<ISC11) | (1<<ISC10); 
+
+  DDRD |= 128;
 
   TCCR1B |= (1 << WGM12);    // Mode 4, CTC on OCR1A
   TIMSK |= (1 << OCIE1A);     //Set interrupt on compare match
@@ -82,5 +83,7 @@ void main() {
     WriteByteSPI(inbetween);
     inbetween=((unsigned int)(diff)>>8)&0xff;
     WriteByteSPI(inbetween);
+
+    if (diff>0) PORTD ^= 128; // flash pd7
   }
 }

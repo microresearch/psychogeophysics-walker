@@ -1,5 +1,10 @@
 import Tkinter, tkFileDialog
+from pylab import *
+import csv, os, Gnuplot, Gnuplot.funcutils
 
+g = Gnuplot.Gnuplot(debug=1)
+NMI = 1852.0
+D2R = pi/180.0
 root = Tkinter.Tk()
 root.withdraw()
 
@@ -9,14 +14,17 @@ if file != None:
 
 #### plotting functions for this file
 
-### first parsing after gps stuff from before and perhaps write to new
-### file after... for example calculate magnitude from real and img:
+### first parsing after gpsgsr.py and perhaps write to new file
+### for example calculate magnitude from real and img, and
+### cumulative RNG
 
 ### following:
 ### magn=sqrt(fft_real_data*fft_real_data+fft_img_data*fft_img_data);
 ###
 ### env: GPS, temp, light, lf, hf, FGM, RNG
 ### psyche: real, imag, temperature, gsr
+
+### how to deal with eeg data in between - format????
 
 ## then plotting various versions according to name of file in logimages
 
