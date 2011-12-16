@@ -116,10 +116,10 @@ class ENVThread(threading.Thread):
                     now = datetime.datetime.now()
                     sttamp = timestamp() 
                     self.data_q.put("\n")
-                    self.data_q.put(data[3:-2])
-                    self.data_q.put(", ")
+                    self.data_q.put(data[:-2])
+                    self.data_q.put(",")
                     self.data_q.put(sttamp)
-#                    self.data_q.put(", ")
+                    self.data_q.put("\n")
 
 
         if self.port:
@@ -156,9 +156,9 @@ class PSYCHEThread(threading.Thread):
                     sttamp = timestamp() 
                     self.data_q.put("\n")
                     self.data_q.put(data[:-2]) # test this!
-                    self.data_q.put(", ")
+                    self.data_q.put(",")
                     self.data_q.put(sttamp)
-#                    self.data_q.put(", ")
+                    self.data_q.put("\n")
 
 
         if self.port:
@@ -245,7 +245,7 @@ while True:
         os.system("clear")
         print "writing: eeg %d psyche: %d env: %d to %s.log" %(0 if eeg==0 else 1, 0 if psyche==0 else 1, 0 if env==0 else 1, tstamp)
 
-# data sanity?
+# data sanity? how to monitor - with queues for each env/psyche and print last buffer
 
         filly.write("".join(map(str,qdata)))
         filly.flush()

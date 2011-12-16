@@ -11,8 +11,7 @@ applet/OneWire.o applet/OneWire.d:  \
   /usr/local/avr/lib/gcc/avr/4.3.4/../../../../avr/include/avr/interrupt.h \
   /usr/local/avr/lib/gcc/avr/4.3.4/../../../../avr/include/avr/io.h \
   /usr/local/avr/lib/gcc/avr/4.3.4/../../../../avr/include/avr/sfr_defs.h \
-  /usr/local/avr/lib/gcc/avr/4.3.4/../../../../avr/include/avr/iom1280.h \
-  /usr/local/avr/lib/gcc/avr/4.3.4/../../../../avr/include/avr/iomxx0_1.h \
+  /usr/local/avr/lib/gcc/avr/4.3.4/../../../../avr/include/avr/iom8.h \
   /usr/local/avr/lib/gcc/avr/4.3.4/../../../../avr/include/avr/portpins.h \
   /usr/local/avr/lib/gcc/avr/4.3.4/../../../../avr/include/avr/common.h \
   /usr/local/avr/lib/gcc/avr/4.3.4/../../../../avr/include/avr/version.h \

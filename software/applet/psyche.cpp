@@ -498,14 +498,14 @@ strFreqLSB=0x000000ff & freqcode;
    Serial.print("p: ");
      
    Serial.print(fft_real_data);
-   Serial.print(", ");
+   Serial.print(",");
    Serial.print(fft_img_data);
-   Serial.print(", ");
+   Serial.print(",");
    getTemp();
    Serial.print(Whole);
    Serial.print(".");
    Serial.print(Fract);
-   Serial.print(", ");
+   Serial.print(",");
    Serial.print(gsr);
    Serial.print("\r\n");
 
