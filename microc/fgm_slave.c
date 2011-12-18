@@ -11,7 +11,6 @@
 
 /* frequency count 1st FGM */
 
-unsigned int fc_dur;
 unsigned long Freq;
 volatile unsigned char low;
 volatile unsigned int FreqCount, count, secondcount, secondfreq;
@@ -54,12 +53,13 @@ void delay(int ms){
 
 void main() {
   unsigned char inbetween;
-  unsigned int d1,d2,diff;
+  unsigned long d1,d2,diff;
   InitSPI();
 
   // set up timer
-  fc_dur=8;
-  OCR1A = 91; // let's say every second! now every 128th
+  OCR1A = 91; // let's say every second! now every 128th of a second
+
+  OCR1A = 11648;
 
   // TODO: enable interrupt on INT0 and INT1
   GICR |= (1<<INT0) | (1<<INT1); 
