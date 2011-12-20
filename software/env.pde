@@ -70,7 +70,6 @@ void init_gps(void)
 {
   Serial1.begin(57600); // shld be 57600 
     delay(500);
-
     Serial1.print(LOCOSYS_REFRESH_RATE_200);
     Serial1.print(NMEA_OUTPUT_5HZ);
     delay(500);
@@ -207,13 +206,17 @@ void decode_gps(void)
             int fixQuality =atoi(token); 
             if(fixQuality != 0) // 0 - no fix, 1 and up - various sorts of fix
               gpsStatus = GPS_STATUS_FIX; // got a fix
-            else
+            else {
               gpsStatus = GPS_STATUS_NO_FIX; // got data, at least
               
               
-            token = strtok_r(NULL, search, &brkb); //satellites in use!! 
-            numSatellites =atoi(token); 
+	      token = strtok_r(NULL, search, &brkb); //satellites in use!! 
+	      numSatellites =atoi(token); 
             
+	      //  Serial.print("e: sats: ");
+	      //Serial.println(numSatellites);
+	    }
+
             token = strtok_r(NULL, search, &brkb);//HDOP, not needed
 
             data_update_event|=0x02; //Update the flag to indicate the new data has arrived.

@@ -8,9 +8,9 @@ D2R = pi/180.0
 root = Tkinter.Tk()
 root.withdraw()
 
-nfile = tkFileDialog.askopenfile(parent=root,mode='rb',title='Choose a file')
+#nfile = tkFileDialog.askopenfile(parent=root,mode='rb',title='Choose a file')
 
-#nfile=open('testlogs/201112171837.log')
+nfile=open('testlogs/201112201410_1.log')
 nnfile=str(nfile.name)
 newfile=file(nnfile[:-4]+"mod.log",'w')
 
@@ -77,6 +77,7 @@ def process_gps_data(data):
                             float(row[0][2:])/60.0)
         longitude.append((float(row[1][0:3]) + \
                               float(row[1][3:])/60.0))
+#        print(float(row[1][0:3]) + float(row[1][3:])/60.0)
         outtemp.append(float(row[2]))
         light.append(float(row[3]))
         lf.append(float(row[4]))
@@ -141,6 +142,8 @@ y=read_csv_file(newfile.name)
 
 newy=[]
 py = (lat-min(lat))*NMI*60.0
+print min(lat)
+print max(lat)
 px = (long-min(long))*NMI*60.0*cos(D2R*lat)
 
 for a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14 in zip(py,px, outtemp, light,lf,hf,FGM,RNG,RNGCUM,distcum1,distcum2,magn,bodytemp,gsr):

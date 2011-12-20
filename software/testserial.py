@@ -122,11 +122,13 @@ class ENVThread(threading.Thread):
                 if len(data) > 2:
                     now = datetime.datetime.now()
                     sttamp = timestamp() 
-                    self.data_q.put("\n")
-                    self.data_q.put(data[:-2])
-                    self.data_q.put(",")
-                    self.data_q.put(sttamp)
-                    self.data_q.put("\n")
+                    toput="\n"+data[:-2]+","+sttamp+"\n"
+                    
+                    self.data_q.put(toput)
+#                     self.data_q.put(data[:-2])
+#                     self.data_q.put(",")
+#                     self.data_q.put(sttamp)
+#                     self.data_q.put("\n")
 
 
         if self.port:
@@ -161,12 +163,12 @@ class PSYCHEThread(threading.Thread):
                 if len(data) > 2:
                     now = datetime.datetime.now()
                     sttamp = timestamp() 
-                    self.data_q.put("\n")
-                    self.data_q.put(data[:-2]) # test this!
-                    self.data_q.put(",")
-                    self.data_q.put(sttamp)
-                    self.data_q.put("\n")
-
+                    toput="\n"+data[:-2]+","+sttamp+"\n"
+                    self.data_q.put(toput)
+#                     self.data_q.put(data[:-2]) # test this!
+#                     self.data_q.put(",")
+#                     self.data_q.put(sttamp)
+#                     self.data_q.put("\n")
 
         if self.port:
             self.port.close()
@@ -226,6 +228,19 @@ res=attachment()
 while (res<int(expected)):
     res=attachment()
 
+# # while we just have: e: SATCNT: 12 // parse and print satcnt here and wait
+
+# parsed=1
+# while (parsed==1):
+#     if env.inWaiting():
+#         line = env.readline()
+#         if re.search("e: SATCNT",line):
+#             print ("SATCNT: %s" %line[11:])
+#             parsed=1
+#         elif re.search(",",line):
+#             parsed=0
+
+
 data_q = Queue.Queue()
 eeg_q = Queue.Queue()
 error_q = Queue.Queue()
@@ -263,12 +278,11 @@ while True:
         print("real, imag, temperature, gsr")
         print ("%s" %(psyche))
 
-
 #        if qdata starts with p: then strip gps and signal else no signal
 
         if re.search("e:",str(qdata)):
             environ="".join(map(str,qdata))
-            gpscoords=environ[11:31]
+            gpscoords=environ[3:23]
             signal=1
         if re.search("p:",str(qdata)):
             psyche="".join(map(str,qdata))
