@@ -214,7 +214,7 @@ void decode_gps(void)
 	      numSatellites =atoi(token); 
             
 	      //  Serial.print("e: sats: ");
-	      //Serial.println(numSatellites);
+	      // Serial.println(numSatellites);
 	    }
 
             token = strtok_r(NULL, search, &brkb);//HDOP, not needed
@@ -329,7 +329,7 @@ void loop() {
   //  decode_gps();
     
 
-    if (strlen(lat)>4){
+      if (strlen(lat)>4){
     Serial.print("e: ");
     Serial.print(lat);
     Serial.print(",");
@@ -351,6 +351,6 @@ void loop() {
     // flash PH0
     PORTH ^= _BV(0);
 
-}
+    }
 
 }

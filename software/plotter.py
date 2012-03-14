@@ -8,9 +8,9 @@ D2R = pi/180.0
 root = Tkinter.Tk()
 root.withdraw()
 
-#nfile = tkFileDialog.askopenfile(parent=root,mode='rb',title='Choose a file')
+nfile = tkFileDialog.askopenfile(parent=root,mode='rb',title='Choose a file')
 
-nfile=open('testlogs/201112201410_1.log')
+#nfile=open('testlogs/201112201410_1.log')
 nnfile=str(nfile.name)
 newfile=file(nnfile[:-4]+"mod.log",'w')
 
@@ -162,7 +162,8 @@ g('set xlabel "metres WE"')
 g('set ylabel "metres NS"') 
 g('set view 60,20')
 #g('set term png size 14043,9933') # A0
-g('set term png size 1024,768') # example
+#g('set term png size 1024,768') # example
+g('set term png size 2500,1875') # A0
 
 # TEMP:
 

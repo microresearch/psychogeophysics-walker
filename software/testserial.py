@@ -1,18 +1,16 @@
 """ 
 first test code for walker project.
 
-TODO:
-
-- question of waiting and should not start up until we have all ports ready
-- add psyche thread
 - headers for each:
 
 env: GPS, temp, light, lf, hf, FGM, RNG
 
 psyche: real, imag, temperature, gsr
 
-- strip and check data
-- some kind of monitor for incoming data (eg. show GPS and values?)
+TODO:
+
+- maybe try two different queues for env and psyche to avoid mix-ups
+
 
 """
 
@@ -84,11 +82,6 @@ class EEGThread(threading.Thread):
              self.data_q.put(data[0])
              self.data_q.put(",")
              state = 1
-#             count +=1
-#                 self.data_q.put(buffer)
-#                 count=0
-#                 buffer=''
-
                  
         if self.port:
             self.port.close()
@@ -125,11 +118,6 @@ class ENVThread(threading.Thread):
                     toput="\n"+data[:-2]+","+sttamp+"\n"
                     
                     self.data_q.put(toput)
-#                     self.data_q.put(data[:-2])
-#                     self.data_q.put(",")
-#                     self.data_q.put(sttamp)
-#                     self.data_q.put("\n")
-
 
         if self.port:
             self.port.close()
@@ -165,10 +153,7 @@ class PSYCHEThread(threading.Thread):
                     sttamp = timestamp() 
                     toput="\n"+data[:-2]+","+sttamp+"\n"
                     self.data_q.put(toput)
-#                     self.data_q.put(data[:-2]) # test this!
-#                     self.data_q.put(",")
-#                     self.data_q.put(sttamp)
-#                     self.data_q.put("\n")
+
 
         if self.port:
             self.port.close()
@@ -280,9 +265,11 @@ while True:
 
 #        if qdata starts with p: then strip gps and signal else no signal
 
+# sometimes gpscoords are of psyche cut??? - queues together???
+
         if re.search("e:",str(qdata)):
             environ="".join(map(str,qdata))
-            gpscoords=environ[3:23]
+            gpscoords=environ[4:24]
             signal=1
         if re.search("p:",str(qdata)):
             psyche="".join(map(str,qdata))
