@@ -269,12 +269,15 @@ while True:
 
 # sometimes gpscoords are of psyche cut??? - queues together???
 
-        if re.search("e:",str(qdata)):
-            environ="".join(map(str,qdata))
-            gpscoords=environ[4:24]
+        bloc="".join(map(str,qdata))
+    
+        if re.search("e:",bloc[:4]):
+            gpscoords=bloc[4:24]
             signal=1
-        if re.search("p:",str(qdata)):
-            psychee="".join(map(str,qdata))
+            environ=bloc
+        elif re.search("p:",bloc):
+            psychee=bloc
+            
 
 #    gpscoords="5205.5416,00714.0201"
 
